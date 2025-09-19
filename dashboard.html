@@ -5,27 +5,17 @@
     <title>Agent Dashboard - NexusFlow</title>
     <link rel="stylesheet" href="dashboard.css">
     <style>
-        /* Sirf is page ke liye khaas styles */
         .dashboard { text-align: center; padding: 20px; }
-        .action-button {
-            background-color: #007bff; color: white; border: none; padding: 15px 30px;
-            font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.2s ease; margin: 10px;
-        }
+        .action-button { background-color: #007bff; color: white; border: none; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.2s ease; margin: 10px; }
         .action-button:hover { transform: translateY(-2px); }
         .action-button:disabled { background-color: #cccccc; cursor: not-allowed; }
         .submit-button { background-color: #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
-        .submit-button:hover { background-color: #218838; }
-        .task-display {
-            margin-top: 30px; padding: 25px; background: white; border-radius: 12px;
-            min-width: 500px; max-width: 700px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            text-align: left; border: 1px solid #e0e0e0;
-        }
+        .task-display { margin-top: 30px; padding: 25px; background: white; border-radius: 12px; min-width: 600px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e0e0e0; }
         .task-display h3 { margin-top: 0; }
         #taskPath { font-family: monospace; background-color: #e9ecef; padding: 5px; border-radius: 4px; word-wrap: break-word; }
-        .qc-actions { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
-        .approve-button { background-color: #28a745; }
-        .reject-button { background-color: #dc3545; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -39,7 +29,6 @@
             <ul>
                 <li class="active"><a href="dashboard.html">Agent View</a></li>
                 <li><a href="reporting.html">Manager View</a></li>
-                <!-- YEH NAYA LINK ADD HUA HAI -->
                 <li><a href="jobs.html">Job Management</a></li>
             </ul>
         </div>
@@ -52,13 +41,15 @@
                     <h3>Current Task Details</h3>
                     <p><strong>Task Path:</strong> <span id="taskPath"></span></p>
                     <p><strong>Task Content:</strong></p>
-                    <pre id="taskContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px; white-space: pre-wrap;"></pre>
-                    <button id="submitQcBtn" class="action-button submit-button">Submit for QC</button>
-                    <div class="qc-actions">
-                        <h4>QC Actions</h4>
-                        <button id="approveQcBtn" class="action-button approve-button">Approve</button>
-                        <button id="rejectQcBtn" class="action-button reject-button">Reject</button>
+                    <pre id="taskContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px; white-space: pre-wrap; max-height: 200px; overflow-y: auto;"></pre>
+                    
+                    <!-- YEH NAYA CONTAINER HAI -->
+                    <div id="custom-form-container" style="border-top: 1px solid #eee; margin-top: 20px; padding-top: 20px;">
+                        <h4>Data Entry Form</h4>
+                        <!-- Yahan par custom form dynamically generate hoga -->
                     </div>
+
+                    <button id="submitQcBtn" class="action-button submit-button" style="margin-top: 20px;">Submit for QC</button>
                 </div>
             </div>
         </div>
