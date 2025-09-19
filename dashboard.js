@@ -1,90 +1,86 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Modal ke elements ko pakarna
+    const fetchBtn = document.getElementById('fetchTaskBtn');
+    const submitBtn = document.getElementById('submitQcBtn');
+    const taskDisplay = document.getElementById('taskDisplay');
+    const taskPathElement = document.getElementById('taskPath');
+    const taskContentElement = document.getElementById('taskContent');
+    const formContainer = document.getElementById('custom-form-container');
     const loadingModal = document.getElementById('loadingModal');
     const modalMessage = document.getElementById('modalMessage');
     const spinner = document.getElementById('spinner');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // ... (baqi tamam elements waisay hi)
+    let currentTaskPath = null;
+    let currentJobName = null;
+    let clientFolder = null;
+    let session = null;
 
-    // Naye Helper Functions: Modal ko control karne ke liye
-    function showModal(message) {
-        modalMessage.textContent = message;
-        spinner.style.display = 'block';
-        closeModalBtn.style.display = 'none';
-        loadingModal.style.display = 'flex';
+    const DB_REPO_OWNER = "larrydispatcherfdsales-blip";
+    const DB_REPO_NAME = "workflow-engine-db";
+
+    function showModal(message) { /* ... (Yeh function waisa hi rahega) ... */ }
+    function showModalResult(message, isSuccess) { /* ... (Yeh function waisa hi rahega) ... */ }
+    closeModalBtn.addEventListener('click', () => { loadingModal.style.display = 'none'; });
+
+    function getSession() {
+        const cookies = document.cookie.split('; ');
+        const sessionCookie = cookies.find(row => row.startsWith('nexus_session='));
+        if (!sessionCookie) return null;
+        try {
+            return JSON.parse(decodeURIComponent(sessionCookie.split('=')[1]));
+        } catch (e) { return null; }
     }
-
-    function showModalResult(message, isSuccess) {
-        modalMessage.textContent = message;
-        spinner.style.display = 'none'; // Spinner chupa do
-        closeModalBtn.style.display = 'block'; // Close button dikhao
-        // Aap yahan par success/error ke liye alag colors bhi set kar sakte hain
-    }
-
-    closeModalBtn.addEventListener('click', () => {
-        loadingModal.style.display = 'none';
-    });
-
-    // ... (getSession function waisa hi rahega)
-
-    // --- Tamam Workflow Functions Ko Update Karna ---
 
     async function triggerMainWorkflow(action, payload = {}) {
-        showModal('Processing your request...'); // Modal dikhao
+        showModal('Processing your request...');
         try {
-            const response = await fetch('/trigger-workflow', { /* ... (body waisi hi) */ });
+            const response = await fetch('/trigger-workflow', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, client_folder: clientFolder, triggered_by: session.username, ...payload })
+            });
             const result = await response.json();
             if (!response.ok) throw new Error(result.message);
-            showModalResult('Action triggered successfully!', true); // Kamyabi ka message
+            showModalResult('Action triggered successfully!', true);
             return result;
         } catch (error) {
-            showModalResult(`Error: ${error.message}`, false); // Nakami ka message
+            showModalResult(`Error: ${error.message}`, false);
             return null;
         }
     }
 
     async function triggerAiQcWorkflow(payload = {}) {
-        showModal('Submitting for AI Quality Check...'); // Modal dikhao
+        showModal('Submitting for AI Quality Check...');
         try {
-            const response = await fetch('/trigger-ai-qc', { /* ... (body waisi hi) */ });
+            const response = await fetch('/trigger-ai-qc', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ client_folder: clientFolder, triggered_by: session.username, ...payload })
+            });
             const result = await response.json();
             if (!response.ok) throw new Error(result.message);
-            showModalResult('AI Quality Check has been started.', true); // Kamyabi ka message
+            showModalResult('AI Quality Check has been started.', true);
             return result;
         } catch (error) {
-            showModalResult(`Error during AI QC: ${error.message}`, false); // Nakami ka message
+            showModalResult(`Error during AI QC: ${error.message}`, false);
             return null;
         }
     }
 
-    // ... (getFileContent, getSchemaForJob, generateForm functions waisay hi rahenge)
+    async function getFileContent(filePath) { /* ... (Yeh function waisa hi rahega) ... */ }
+    async function getSchemaForJob(jobName) { /* ... (Yeh function waisa hi rahega) ... */ }
+    function generateForm(schema) { /* ... (Yeh function waisa hi rahega) ... */ }
 
-    // --- Button Click Handlers (ab inmein alert() nahi hai) ---
+    // --- Main Logic ---
+    session = getSession();
+    if (!session) {
+        alert("You are not logged in. Redirecting to login page.");
+        window.location.href = '/index.html';
+        return;
+    } else {
+        clientFolder = session.company_id;
+    }
 
-    fetchBtn.addEventListener('click', async () => {
-        taskDisplay.style.display = 'none';
-        showModal('Fetching next available task...'); // Modal dikhao
-        const result = await triggerMainWorkflow('fetch_task');
-        
-        if (result && result.fetched_task_path) {
-            // ... (Task fetch karke dikhane ka poora logic waisa hi)
-            loadingModal.style.display = 'none'; // Kaam hone par modal chupa do
-        } else {
-            showModalResult("No new tasks found or an error occurred.", false);
-        }
-    });
-
-    submitBtn.addEventListener('click', async () => {
-        if (!currentTaskPath) return alert("No active task to submit.");
-        // ... (Form se data nikalne ka logic)
-
-        const result = await triggerAiQcWorkflow({ /* ... (payload) */ });
-        
-        if (result) {
-            taskDisplay.style.display = 'none';
-            fetchBtn.style.display = 'block';
-            currentTaskPath = null;
-        }
-    });
+    fetchBtn.addEventListener('click', async () => { /* ... (Yeh function waisa hi rahega) ... */ });
+    submitBtn.addEventListener('click', async () => { /* ... (Yeh function waisa hi rahega) ... */ });
 });
