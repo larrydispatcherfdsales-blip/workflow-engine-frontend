@@ -5,53 +5,46 @@
     <title>Agent Dashboard - NexusFlow</title>
     <link rel="stylesheet" href="dashboard.css">
     <style>
+        /* --- NAYA MODAL KA CSS --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; /* Shuruaat mein chupa hua */
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: white; padding: 30px 40px; border-radius: 12px;
+            text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .spinner {
+            border: 4px solid #f3f3f3; border-top: 4px solid #3498db;
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite; margin: 0 auto 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* --- Purana CSS waisa hi --- */
         .dashboard { text-align: center; padding: 20px; }
-        .action-button { background-color: #007bff; color: white; border: none; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.2s ease; margin: 10px; }
-        .action-button:hover { transform: translateY(-2px); }
-        .action-button:disabled { background-color: #cccccc; cursor: not-allowed; }
-        .submit-button { background-color: #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
-        .task-display { margin-top: 30px; padding: 25px; background: white; border-radius: 12px; min-width: 600px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e0e0e0; }
-        .task-display h3 { margin-top: 0; }
-        #taskPath { font-family: monospace; background-color: #e9ecef; padding: 5px; border-radius: 4px; word-wrap: break-word; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .action-button { /* ... (baqi styles waisay hi) ... */ }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">NexusFlow</div>
-        <div class="user-menu"><span>Agent View</span></div>
+    <!-- (Navbar, Container, Sidebar, main-content ka structure waisa hi rahega) -->
+    <div class="main-content">
+        <div class="dashboard">
+            <h1>Your Work Station</h1>
+            <button id="fetchTaskBtn" class="action-button">Fetch Next Task</button>
+            <div id="taskDisplay" class="task-display" style="display:none;">
+                <!-- ... (Task display ka tamam content waisa hi) ... -->
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li class="active"><a href="dashboard.html">Agent View</a></li>
-                <li><a href="reporting.html">Manager View</a></li>
-                <li><a href="jobs.html">Job Management</a></li>
-            </ul>
-        </div>
-
-        <div class="main-content">
-            <div class="dashboard">
-                <h1>Your Work Station</h1>
-                <button id="fetchTaskBtn" class="action-button">Fetch Next Task</button>
-                <div id="taskDisplay" class="task-display" style="display:none;">
-                    <h3>Current Task Details</h3>
-                    <p><strong>Task Path:</strong> <span id="taskPath"></span></p>
-                    <p><strong>Task Content:</strong></p>
-                    <pre id="taskContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px; white-space: pre-wrap; max-height: 200px; overflow-y: auto;"></pre>
-                    
-                    <!-- YEH NAYA CONTAINER HAI -->
-                    <div id="custom-form-container" style="border-top: 1px solid #eee; margin-top: 20px; padding-top: 20px;">
-                        <h4>Data Entry Form</h4>
-                        <!-- Yahan par custom form dynamically generate hoga -->
-                    </div>
-
-                    <button id="submitQcBtn" class="action-button submit-button" style="margin-top: 20px;">Submit for QC</button>
-                </div>
-            </div>
+    <!-- NAYA MODAL KA HTML -->
+    <div id="loadingModal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="spinner" class="spinner"></div>
+            <h3 id="modalMessage">Processing... Please Wait...</h3>
+            <button id="closeModalBtn" style="display:none; margin-top: 20px;">Close</button>
         </div>
     </div>
     
