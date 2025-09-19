@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Dashboard - NexusFlow</title>
+    <style>
+        body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f7f6; margin: 0; }
+        .dashboard { text-align: center; }
+        .fetch-button {
+            background-color: #007bff; color: white; border: none; padding: 20px 40px;
+            font-size: 24px; font-weight: bold; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4); transition: all 0.2s ease;
+        }
+        .fetch-button:hover { background-color: #0056b3; box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5); }
+        .task-display { margin-top: 30px; padding: 20px; background: white; border-radius: 8px; min-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Your Work Station</h1>
+        <button id="fetchTaskBtn" class="fetch-button">Fetch Next Task</button>
+        <div id="taskDisplay" class="task-display" style="display:none;">
+            <h3>Current Task:</h3>
+            <p id="taskPath"></p>
+            <p><i>(Task content will be shown here)</i></p>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>
