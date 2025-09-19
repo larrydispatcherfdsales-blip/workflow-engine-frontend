@@ -3,14 +3,11 @@ export async function onRequest(context) {
     const GITHUB_TOKEN = context.env.GITHUB_PAT;
     const REPO_OWNER = "larrydispatcherfdsales-blip";
     const REPO_NAME = "workflow-engine-backend";
-
-    // Hum naye AI workflow ko target kar rahe hain
     const GITHUB_API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/ai-qc.yml/dispatches`;
 
     try {
-        const { task_path, form_data_json } = await context.request.json( );
+        const { client_folder, task_path, form_data_json } = await context.request.json( );
 
-        // GitHub Actions ko trigger karna
         const response = await fetch(GITHUB_API_URL, {
             method: 'POST',
             headers: {
@@ -21,6 +18,7 @@ export async function onRequest(context) {
             body: JSON.stringify({
                 ref: 'main',
                 inputs: {
+                    client_folder: client_folder,
                     task_path: task_path,
                     form_data_json: form_data_json
                 }
@@ -28,7 +26,8 @@ export async function onRequest(context) {
         });
 
         if (!response.ok) {
-            throw new Error(`GitHub API dispatch failed with status ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`GitHub API dispatch failed with status ${response.status}: ${errorText}`);
         }
 
         return new Response(JSON.stringify({ message: "AI Quality Check has been started." }), {
