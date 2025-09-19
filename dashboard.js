@@ -1,33 +1,44 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ... (Tamam purane variables waisay hi rahenge) ...
     const fetchBtn = document.getElementById('fetchTaskBtn');
     const submitBtn = document.getElementById('submitQcBtn');
-    const taskDisplay = document.getElementById('taskDisplay');
-    const taskPathElement = document.getElementById('taskPath');
-    const taskContentElement = document.getElementById('taskContent');
-    const formContainer = document.getElementById('custom-form-container');
+    // ... (baqi elements)
 
     let currentTaskPath = null;
-    let currentJobName = null;
+    const CLIENT_FOLDER = "client_A_demo"; // Humne client ko yahan hard-code kar diya hai
 
-    const DB_REPO_OWNER = "larrydispatcherfdsales-blip";
-    const DB_REPO_NAME = "workflow-engine-db";
-
-    // Helper Function: trigger-workflow (main.yml ke liye)
+    // Helper Function: trigger-workflow
     async function triggerMainWorkflow(action, payload = {}) {
-        // ... (Yeh function bilkul waisa hi rahega jaisa pehle tha)
+        fetchBtn.disabled = true;
+        fetchBtn.textContent = 'Processing...';
+        try {
+            const response = await fetch('/trigger-workflow', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // Ab hum har request ke sath client_folder bhi bhej rahe hain
+                body: JSON.stringify({ action, client_folder: CLIENT_FOLDER, ...payload })
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message);
+            return result;
+        } catch (error) {
+            alert(`An error occurred: ${error.message}`);
+            return null;
+        } finally {
+            fetchBtn.disabled = false;
+            fetchBtn.textContent = 'Fetch Next Task';
+        }
     }
 
-    // Naya Helper Function: AI QC Workflow ko trigger karne ke liye
+    // Helper Function: trigger-ai-qc
     async function triggerAiQcWorkflow(payload = {}) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting for AI QC...';
         try {
-            // Hum ek naye Cloudflare worker ko call karenge
             const response = await fetch('/trigger-ai-qc', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                // Yahan bhi client_folder bhej rahe hain
+                body: JSON.stringify({ client_folder: CLIENT_FOLDER, ...payload })
             });
             const result = await response.json();
             if (!response.ok) throw new Error(result.message);
@@ -42,26 +53,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ... (getFileContent, getSchemaForJob, generateForm, fetchBtn ka logic waisa hi rahega) ...
+    // ... (getFileContent, getSchemaForJob, generateForm functions waisay hi rahenge) ...
 
-    // "Submit for QC" ka naya, mukammal logic
+    // "Fetch Next Task" ka logic ab triggerMainWorkflow ko call karega
+    fetchBtn.addEventListener('click', async () => {
+        taskDisplay.style.display = 'none';
+        const result = await triggerMainWorkflow('fetch_task');
+        // ... (baqi ka logic bilkul waisa hi rahega)
+    });
+
+    // "Submit for QC" ka logic ab triggerAiQcWorkflow ko call karega
     submitBtn.addEventListener('click', async () => {
         if (!currentTaskPath) return alert("No active task to submit.");
-
-        // Form se data nikalna
         const formData = {};
         const inputs = formContainer.querySelectorAll('.custom-field-input');
-        inputs.forEach(input => {
-            formData[input.id] = input.value;
-        });
+        inputs.forEach(input => { formData[input.id] = input.value; });
 
-        // Naya Logic: AI QC wale workflow ko trigger karna
         await triggerAiQcWorkflow({ 
             task_path: currentTaskPath,
             form_data_json: JSON.stringify(formData)
         });
         
-        // UI ko reset karna
         taskDisplay.style.display = 'none';
         fetchBtn.style.display = 'block';
         currentTaskPath = null;
