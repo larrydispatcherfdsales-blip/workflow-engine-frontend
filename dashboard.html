@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Agent Dashboard - NexusFlow</title>
+    <link rel="stylesheet" href="dashboard.css">
     <style>
-        body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f7f6; margin: 0; }
+        /* Sirf is page ke liye khaas styles */
         .dashboard { text-align: center; padding: 20px; }
         .action-button {
             background-color: #007bff; color: white; border: none; padding: 15px 30px;
@@ -28,32 +29,39 @@
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <h1>Your Work Station</h1>
-        
-        <!-- Sirf ek "Fetch Task" ka button shuruaat mein dikhega -->
-        <button id="fetchTaskBtn" class="action-button">Fetch Next Task</button>
+    <div class="navbar">
+        <div class="logo">NexusFlow</div>
+        <div class="user-menu"><span>Agent View</span></div>
+    </div>
 
-        <!-- Yeh hissa task fetch hone ke baad nazar aayega -->
-        <div id="taskDisplay" class="task-display" style="display:none;">
-            <h3>Current Task Details</h3>
-            <p><strong>Task Path:</strong> <span id="taskPath"></span></p>
-            <p><strong>Task Content:</strong></p>
-            <pre id="taskContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px; white-space: pre-wrap;"></pre>
-            
-            <!-- Agent ke liye Submit ka button -->
-            <button id="submitQcBtn" class="action-button submit-button">Submit for QC</button>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li class="active"><a href="dashboard.html">Agent View</a></li>
+                <li><a href="reporting.html">Manager View</a></li>
+            </ul>
+        </div>
 
-            <!-- QC Agent ke liye Approve/Reject ke buttons -->
-            <div class="qc-actions">
-                <h4>QC Actions</h4>
-                <button id="approveQcBtn" class="action-button approve-button">Approve</button>
-                <button id="rejectQcBtn" class="action-button reject-button">Reject</button>
+        <div class="main-content">
+            <div class="dashboard">
+                <h1>Your Work Station</h1>
+                <button id="fetchTaskBtn" class="action-button">Fetch Next Task</button>
+                <div id="taskDisplay" class="task-display" style="display:none;">
+                    <h3>Current Task Details</h3>
+                    <p><strong>Task Path:</strong> <span id="taskPath"></span></p>
+                    <p><strong>Task Content:</strong></p>
+                    <pre id="taskContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px; white-space: pre-wrap;"></pre>
+                    <button id="submitQcBtn" class="action-button submit-button">Submit for QC</button>
+                    <div class="qc-actions">
+                        <h4>QC Actions</h4>
+                        <button id="approveQcBtn" class="action-button approve-button">Approve</button>
+                        <button id="rejectQcBtn" class="action-button reject-button">Reject</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- JavaScript file ko aakhir mein link karna -->
+    
     <script src="dashboard.js"></script>
 </body>
 </html>
