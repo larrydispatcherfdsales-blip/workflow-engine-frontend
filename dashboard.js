@@ -1,52 +1,90 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ... (Tamam purane elements waisay hi)
+    // Modal ke elements ko pakarna
+    const loadingModal = document.getElementById('loadingModal');
+    const modalMessage = document.getElementById('modalMessage');
+    const spinner = document.getElementById('spinner');
+    const closeModalBtn = document.getElementById('closeModalBtn');
 
-    let currentTaskPath = null;
-    let clientFolder = null; // Ab yeh dynamic hoga
+    // ... (baqi tamam elements waisay hi)
 
-    // Naya Function: Cookie se session data parhna
-    function getSession() {
-        const cookies = document.cookie.split('; ');
-        const sessionCookie = cookies.find(row => row.startsWith('nexus_session='));
-        if (!sessionCookie) return null;
+    // Naye Helper Functions: Modal ko control karne ke liye
+    function showModal(message) {
+        modalMessage.textContent = message;
+        spinner.style.display = 'block';
+        closeModalBtn.style.display = 'none';
+        loadingModal.style.display = 'flex';
+    }
+
+    function showModalResult(message, isSuccess) {
+        modalMessage.textContent = message;
+        spinner.style.display = 'none'; // Spinner chupa do
+        closeModalBtn.style.display = 'block'; // Close button dikhao
+        // Aap yahan par success/error ke liye alag colors bhi set kar sakte hain
+    }
+
+    closeModalBtn.addEventListener('click', () => {
+        loadingModal.style.display = 'none';
+    });
+
+    // ... (getSession function waisa hi rahega)
+
+    // --- Tamam Workflow Functions Ko Update Karna ---
+
+    async function triggerMainWorkflow(action, payload = {}) {
+        showModal('Processing your request...'); // Modal dikhao
         try {
-            // Cookie ki value URL-decoded hoti hai, usay parse karna
-            return JSON.parse(decodeURIComponent(sessionCookie.split('=')[1]));
-        } catch (e) {
+            const response = await fetch('/trigger-workflow', { /* ... (body waisi hi) */ });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message);
+            showModalResult('Action triggered successfully!', true); // Kamyabi ka message
+            return result;
+        } catch (error) {
+            showModalResult(`Error: ${error.message}`, false); // Nakami ka message
             return null;
         }
     }
 
-    const session = getSession();
-
-    if (!session) {
-        // Agar session nahi hai, to user ko login page par wapas bhej do
-        alert("You are not logged in. Redirecting to login page.");
-        window.location.href = '/index.html';
-        return;
-    } else {
-        // Agar session hai, to client ka folder set kar do
-        clientFolder = session.company_id;
-        // Aap yahan par user ka naam bhi display karwa sakte hain
-        // document.getElementById('usernameDisplay').textContent = session.username;
-    }
-
-    // ... (Tamam helper functions - triggerMainWorkflow, triggerAiQcWorkflow, etc. - ab clientFolder variable ka istemal karenge)
-
-    // Example: triggerMainWorkflow ab aisa dikhega
-    async function triggerMainWorkflow(action, payload = {}) {
-        // ...
+    async function triggerAiQcWorkflow(payload = {}) {
+        showModal('Submitting for AI Quality Check...'); // Modal dikhao
         try {
-            const response = await fetch('/trigger-workflow', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action, client_folder: clientFolder, ...payload }) // Yahan dynamic variable istemal ho raha hai
-            });
-            // ...
+            const response = await fetch('/trigger-ai-qc', { /* ... (body waisi hi) */ });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message);
+            showModalResult('AI Quality Check has been started.', true); // Kamyabi ka message
+            return result;
         } catch (error) {
-            // ...
+            showModalResult(`Error during AI QC: ${error.message}`, false); // Nakami ka message
+            return null;
         }
     }
-    
-    // ... (Baqi tamam file bilkul waisi hi rahegi)
+
+    // ... (getFileContent, getSchemaForJob, generateForm functions waisay hi rahenge)
+
+    // --- Button Click Handlers (ab inmein alert() nahi hai) ---
+
+    fetchBtn.addEventListener('click', async () => {
+        taskDisplay.style.display = 'none';
+        showModal('Fetching next available task...'); // Modal dikhao
+        const result = await triggerMainWorkflow('fetch_task');
+        
+        if (result && result.fetched_task_path) {
+            // ... (Task fetch karke dikhane ka poora logic waisa hi)
+            loadingModal.style.display = 'none'; // Kaam hone par modal chupa do
+        } else {
+            showModalResult("No new tasks found or an error occurred.", false);
+        }
+    });
+
+    submitBtn.addEventListener('click', async () => {
+        if (!currentTaskPath) return alert("No active task to submit.");
+        // ... (Form se data nikalne ka logic)
+
+        const result = await triggerAiQcWorkflow({ /* ... (payload) */ });
+        
+        if (result) {
+            taskDisplay.style.display = 'none';
+            fetchBtn.style.display = 'block';
+            currentTaskPath = null;
+        }
+    });
 });
