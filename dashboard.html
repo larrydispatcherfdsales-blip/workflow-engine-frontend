@@ -5,26 +5,55 @@
     <title>Agent Dashboard - NexusFlow</title>
     <style>
         body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f7f6; margin: 0; }
-        .dashboard { text-align: center; }
-        .fetch-button {
-            background-color: #007bff; color: white; border: none; padding: 20px 40px;
-            font-size: 24px; font-weight: bold; border-radius: 12px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4); transition: all 0.2s ease;
+        .dashboard { text-align: center; padding: 20px; }
+        .action-button {
+            background-color: #007bff; color: white; border: none; padding: 15px 30px;
+            font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.2s ease; margin: 10px;
         }
-        .fetch-button:hover { background-color: #0056b3; box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5); }
-        .task-display { margin-top: 30px; padding: 20px; background: white; border-radius: 8px; min-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .action-button:hover { transform: translateY(-2px); }
+        .action-button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        .submit-button { background-color: #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
+        .submit-button:hover { background-color: #218838; }
+        .task-display {
+            margin-top: 30px; padding: 25px; background: white; border-radius: 12px;
+            min-width: 500px; max-width: 700px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: left; border: 1px solid #e0e0e0;
+        }
+        .task-display h3 { margin-top: 0; }
+        #taskPath { font-family: monospace; background-color: #e9ecef; padding: 5px; border-radius: 4px; word-wrap: break-word; }
+        .qc-actions { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .approve-button { background-color: #28a745; }
+        .reject-button { background-color: #dc3545; }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <h1>Your Work Station</h1>
-        <button id="fetchTaskBtn" class="fetch-button">Fetch Next Task</button>
+        
+        <!-- Sirf ek "Fetch Task" ka button shuruaat mein dikhega -->
+        <button id="fetchTaskBtn" class="action-button">Fetch Next Task</button>
+
+        <!-- Yeh hissa task fetch hone ke baad nazar aayega -->
         <div id="taskDisplay" class="task-display" style="display:none;">
-            <h3>Current Task:</h3>
-            <p id="taskPath"></p>
-            <p><i>(Task content will be shown here)</i></p>
+            <h3>Current Task Details</h3>
+            <p><strong>Task Path:</strong> <span id="taskPath"></span></p>
+            <p><strong>Task Content:</strong></p>
+            <pre id="taskContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px; white-space: pre-wrap;"></pre>
+            
+            <!-- Agent ke liye Submit ka button -->
+            <button id="submitQcBtn" class="action-button submit-button">Submit for QC</button>
+
+            <!-- QC Agent ke liye Approve/Reject ke buttons -->
+            <div class="qc-actions">
+                <h4>QC Actions</h4>
+                <button id="approveQcBtn" class="action-button approve-button">Approve</button>
+                <button id="rejectQcBtn" class="action-button reject-button">Reject</button>
+            </div>
         </div>
     </div>
+
+    <!-- JavaScript file ko aakhir mein link karna -->
     <script src="dashboard.js"></script>
 </body>
 </html>
