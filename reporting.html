@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporting - NexusFlow</title>
+    <link rel="stylesheet" href="dashboard.css"> <!-- Hum purana CSS hi istemal karenge -->
+    <style>
+        .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .stat-card h3 { margin-top: 0; color: #555; }
+        .stat-card .count { font-size: 48px; font-weight: bold; color: #007bff; }
+    </style>
+</head>
+<body>
+    <!-- (Yahan par aap dashboard.html se navbar aur sidebar ka code copy kar sakte hain, lekin "Reporting" ko active mark karein) -->
+    <div class="container">
+        <div class="sidebar">
+             <ul>
+                <li><a href="dashboard.html">Agent View</a></li>
+                <li class="active"><a href="reporting.html">Manager View</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Live Operations Dashboard</h1>
+            <div id="report-grid" class="report-grid">
+                <div class="stat-card">
+                    <h3>Tasks To Do</h3>
+                    <p id="count-todo" class="count">...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>In Progress</h3>
+                    <p id="count-inprogress" class="count">...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>In QC</h3>
+                    <p id="count-in_qc" class="count">...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed</h3>
+                    <p id="count-completed" class="count">...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="reporting.js"></script>
+</body>
+</html>
