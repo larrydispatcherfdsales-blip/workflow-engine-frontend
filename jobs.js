@@ -5,50 +5,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusMessage = document.getElementById('statusMessage');
     const addFieldBtn = document.getElementById('addFieldBtn');
     const fieldsContainer = document.getElementById('fields-container');
+    // Naye financial fields ko pakarna
+    const agentCostInput = document.getElementById('agentCost');
+    const revenuePerTaskInput = document.getElementById('revenuePerTask');
 
     let fieldCounter = 0;
-    let session = null;
-    let clientFolder = null;
-
-    function getSession() { /* ... (getSession ka poora code yahan copy karein) ... */ }
-    
-    session = getSession();
-    if (!session) {
-        alert("You are not logged in. Redirecting to login page.");
-        window.location.href = '/index.html';
-        return;
-    } else {
-        clientFolder = session.company_id;
-    }
+    // ... (session ka logic waisa hi rahega)
 
     addFieldBtn.addEventListener('click', () => { /* ... (Yeh function waisa hi rahega) ... */ });
 
     createJobBtn.addEventListener('click', async function() {
-        // ... (Validation logic waisa hi)
-        // ... (Schema banane ka logic waisa hi)
+        const jobName = jobNameInput.value.trim();
+        const file = zipFileInput.files[0];
+
+        if (!jobName || !file) { /* ... (validation waisi hi) */ }
+        if (/\s/.test(jobName)) { /* ... (validation waisi hi) */ }
+
+        // Custom fields ka schema banana
+        const customFields = [];
+        const fieldRows = fieldsContainer.querySelectorAll('.field-row');
+        fieldRows.forEach((row, index) => { /* ... (yeh logic waisa hi) */ });
+
+        // Naya Logic: Financial data ko schema mein shamil karna
+        const jobSchema = {
+            fields: customFields,
+            financials: {
+                agentCostPerHour: agentCostInput.value || 0,
+                revenuePerTask: revenuePerTaskInput.value || 0
+            }
+        };
 
         createJobBtn.disabled = true;
-        statusMessage.textContent = 'Uploading file...';
+        statusMessage.textContent = 'Uploading file and creating job...';
 
         try {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
                 const base64File = reader.result.split(',')[1];
+
                 const response = await fetch('/upload-job', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         client_folder: clientFolder,
-                        triggered_by: session.username, // Agent ka naam bhejna
+                        triggered_by: session.username,
                         job_name: jobName,
                         zip_file_base64: base64File,
-                        schema_json: JSON.stringify(customFieldsSchema)
+                        // Ab hum poora jobSchema object bhej rahe hain
+                        schema_json: JSON.stringify(jobSchema)
                     })
                 });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.message);
-                statusMessage.textContent = `Success! ${result.message}`;
+                // ... (baqi ka logic waisa hi)
             };
             // ... (onerror logic)
         } catch (error) {
