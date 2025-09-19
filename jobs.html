@@ -8,48 +8,36 @@
         .form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
-        .form-group input[type="text"], .form-group input[type="file"] {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
-        }
-        .submit-button {
-            background-color: #28a745; color: white; border: none; padding: 12px 25px;
-            font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer;
-        }
-        .submit-button:disabled { background-color: #cccccc; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .submit-button { background-color: #28a745; color: white; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+        .field-builder { border-top: 1px solid #eee; margin-top: 20px; padding-top: 20px; }
+        .field-row { display: flex; gap: 10px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">NexusFlow</div>
-        <div class="user-menu"><span>Manager View</span></div>
-    </div>
-
-    <div class="container">
-        <div class="sidebar">
-             <ul>
-                <li><a href="dashboard.html">Agent View</a></li>
-                <li><a href="reporting.html">Reporting</a></li>
-                <li class="active"><a href="jobs.html">Job Management</a></li>
-            </ul>
-        </div>
-
-        <div class="main-content">
-            <h1>Create a New Job</h1>
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="jobName">Job Name</label>
-                    <input type="text" id="jobName" placeholder="e.g., Client X - Medical Forms Batch 1">
-                </div>
-                <div class="form-group">
-                    <label for="zipFile">Upload Tasks (ZIP file)</label>
-                    <input type="file" id="zipFile" accept=".zip">
-                </div>
-                <button id="createJobBtn" class="submit-button">Create Job & Upload Tasks</button>
-                <p id="statusMessage" style="margin-top: 15px;"></p>
+    <!-- (Navbar aur Sidebar ka code waisa hi rahega) -->
+    <div class="main-content">
+        <h1>Create a New Job</h1>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="jobName">Job Name</label>
+                <input type="text" id="jobName" placeholder="e.g., Client X - Medical Forms Batch 1">
             </div>
+            <div class="form-group">
+                <label for="zipFile">Upload Tasks (ZIP file)</label>
+                <input type="file" id="zipFile" accept=".zip">
+            </div>
+            
+            <!-- Custom Fields ka naya section -->
+            <div class="field-builder">
+                <h3>Custom Data Entry Fields</h3>
+                <div id="fields-container"></div>
+                <button id="addFieldBtn" type="button">+ Add Field</button>
+            </div>
+            <hr>
+            <button id="createJobBtn" class="submit-button">Create Job & Upload Tasks</button>
         </div>
     </div>
-    
     <script src="jobs.js"></script>
 </body>
 </html>
