@@ -15,48 +15,43 @@
         .field-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .field-row input { flex-grow: 1; }
         .remove-field-btn { background: #dc3545; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; }
+        .financial-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid #eee; margin-top: 20px; padding-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">NexusFlow</div>
-        <div class="user-menu"><span>Manager View</span></div>
-    </div>
-
-    <div class="container">
-        <div class="sidebar">
-             <ul>
-                <li><a href="dashboard.html">Agent View</a></li>
-                <li><a href="reporting.html">Reporting</a></li>
-                <li class="active"><a href="jobs.html">Job Management</a></li>
-            </ul>
-        </div>
-
-        <div class="main-content">
-            <h1>Create a New Job</h1>
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="jobName">Job Name (Must be unique, no spaces e.g., ClientX_Medical_Batch1)</label>
-                    <input type="text" id="jobName" placeholder="ClientX_Medical_Batch1">
-                </div>
-                <div class="form-group">
-                    <label for="zipFile">Upload Tasks (ZIP file containing .txt files)</label>
-                    <input type="file" id="zipFile" accept=".zip">
-                </div>
-                
-                <!-- Custom Fields ka naya section -->
-                <div class="field-builder">
-                    <h3>Custom Data Entry Fields (Optional)</h3>
-                    <p>Design the form your agents will see for this job.</p>
-                    <div id="fields-container">
-                        <!-- Yahan par naye fields dynamically add honge -->
-                    </div>
-                    <button id="addFieldBtn" type="button" style="margin-top: 10px;">+ Add Field</button>
-                </div>
-                <hr>
-                <button id="createJobBtn" class="submit-button">Create Job & Upload Tasks</button>
-                <p id="statusMessage" style="margin-top: 15px; font-weight: bold;"></p>
+    <!-- (Navbar aur Sidebar ka code waisa hi rahega) -->
+    <div class="main-content">
+        <h1>Create a New Job</h1>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="jobName">Job Name (Must be unique, no spaces e.g., ClientX_Medical_Batch1)</label>
+                <input type="text" id="jobName" placeholder="ClientX_Medical_Batch1">
             </div>
+            <div class="form-group">
+                <label for="zipFile">Upload Tasks (ZIP file containing .txt files)</label>
+                <input type="file" id="zipFile" accept=".zip">
+            </div>
+            
+            <div class="field-builder">
+                <h3>Custom Data Entry Fields (Optional)</h3>
+                <div id="fields-container"></div>
+                <button id="addFieldBtn" type="button" style="margin-top: 10px;">+ Add Field</button>
+            </div>
+
+            <!-- YEH NAYA FINANCIAL SECTION HAI -->
+            <div class="financial-section">
+                <div class="form-group">
+                    <label for="agentCost">Agent Cost (PKR per hour)</label>
+                    <input type="number" id="agentCost" placeholder="e.g., 250">
+                </div>
+                <div class="form-group">
+                    <label for="revenuePerTask">Revenue per Task (PKR)</label>
+                    <input type="number" id="revenuePerTask" placeholder="e.g., 15">
+                </div>
+            </div>
+            <hr>
+            <button id="createJobBtn" class="submit-button">Create Job & Upload Tasks</button>
+            <p id="statusMessage" style="margin-top: 15px; font-weight: bold;"></p>
         </div>
     </div>
     
