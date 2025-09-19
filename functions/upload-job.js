@@ -2,14 +2,12 @@
 export async function onRequest(context) {
     const GITHUB_TOKEN = context.env.GITHUB_PAT;
     const REPO_OWNER = "larrydispatcherfdsales-blip";
-    const REPO_NAME = "workflow-engine-backend"; // Hamara backend engine
-
+    const REPO_NAME = "workflow-engine-backend";
     const GITHUB_API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/job-processor.yml/dispatches`;
 
     try {
-        const { jobName, fileContent } = await context.request.json( );
+        const { client_folder, job_name, zip_file_base64, schema_json } = await context.request.json( );
 
-        // GitHub Actions ko trigger karna aur payload mein file ka content bhejna
         const response = await fetch(GITHUB_API_URL, {
             method: 'POST',
             headers: {
@@ -20,14 +18,17 @@ export async function onRequest(context) {
             body: JSON.stringify({
                 ref: 'main',
                 inputs: {
-                    job_name: jobName,
-                    zip_file_base64: fileContent
+                    client_folder: client_folder,
+                    job_name: job_name,
+                    zip_file_base64: zip_file_base64,
+                    schema_json: schema_json
                 }
             })
         });
 
         if (!response.ok) {
-            throw new Error(`GitHub API dispatch failed with status ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`GitHub API dispatch failed with status ${response.status}: ${errorText}`);
         }
 
         return new Response(JSON.stringify({ message: "Job upload started. Tasks will appear in 'To Do' shortly." }), {
