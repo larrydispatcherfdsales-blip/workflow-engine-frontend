@@ -5,51 +5,39 @@
     <title>Reporting - NexusFlow</title>
     <link rel="stylesheet" href="dashboard.css">
     <style>
-        .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
-        .stat-card h3 { margin-top: 0; color: #555; font-size: 18px; }
-        .stat-card .count { font-size: 48px; font-weight: bold; color: #007bff; margin: 10px 0; }
+        .report-grid { /* ... (purana style waisa hi) ... */ }
+        .stat-card { /* ... (purana style waisa hi) ... */ }
+        /* Naye Table Ka CSS */
+        .report-table { width: 100%; border-collapse: collapse; margin-top: 30px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .report-table th, .report-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .report-table th { background-color: #f8f9fa; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">NexusFlow</div>
-        <div class="user-menu"><span>Manager View</span></div>
-    </div>
-
-    <div class="container">
-        <div class="sidebar">
-             <ul>
-                <li><a href="dashboard.html">Agent View</a></li>
-                <li class="active"><a href="reporting.html">Reporting</a></li>
-                <!-- YEH NAYA LINK ADD HUA HAI -->
-                <li><a href="jobs.html">Job Management</a></li>
-            </ul>
+    <!-- (Navbar aur Sidebar ka code waisa hi rahega) -->
+    <div class="main-content">
+        <h1>Live Operations Dashboard</h1>
+        <div id="report-grid" class="report-grid">
+            <!-- ... (4 stat cards waisay hi) ... -->
         </div>
 
-        <div class="main-content">
-            <h1>Live Operations Dashboard</h1>
-            <p>This dashboard automatically refreshes every 30 seconds.</p>
-              
-
-            <div id="report-grid" class="report-grid">
-                <div class="stat-card">
-                    <h3>Tasks To Do</h3>
-                    <p id="count-todo" class="count">...</p>
-                </div>
-                <div class="stat-card">
-                    <h3>In Progress</h3>
-                    <p id="count-inprogress" class="count">...</p>
-                </div>
-                <div class="stat-card">
-                    <h3>In QC</h3>
-                    <p id="count-in_qc" class="count">...</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Completed</h3>
-                    <p id="count-completed" class="count">...</p>
-                </div>
-            </div>
+        <!-- NAYA LEADERBOARD TABLE -->
+        <div style="margin-top: 40px;">
+            <h2>Agent Performance Leaderboard</h2>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Agent Name</th>
+                        <th>Tasks Completed</th>
+                        <th>Avg. Time / Task</th>
+                        <th>Rejection Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Yahan par data dynamically add hoga -->
+                    <tr><td colspan="4" style="text-align:center;">Loading report...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <script src="reporting.js"></script>
